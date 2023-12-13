@@ -10,7 +10,7 @@ const prodRoute = require("./routes/product");
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const paymRoute = require("./routes/razorpay");
-
+const phonepe = require("./routes/phonepe");
 
 
 var cors = require('cors')
@@ -31,6 +31,8 @@ app.use("/api/products", prodRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/checkout", paymRoute);
+app.use("/api/phonepe", phonepe);
+
 app.listen(5000, () => {
     console.log("Backend is running");
 });
