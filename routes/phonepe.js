@@ -17,7 +17,7 @@ router.post('/newPayment', async (req, res) => {
             amount: req.body.amount * 100,
             redirectUrl: `http://sev7n.in/success`,
             redirectMode: 'REDIRECT',
-            callbackUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
+            callbackUrl: `https://e-commerce-api-krish3957.vercel.app/api/phonepe/status/${merchantTransactionId}`,
             mobileNumber: req.body.number,
             paymentInstrument: {
                 type: 'PAY_PAGE'
