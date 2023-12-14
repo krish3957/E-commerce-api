@@ -15,7 +15,6 @@ router.post('/newPayment', async (req, res) => {
             merchantUserId: req.body.MUID,
             name: req.body.name,
             amount: req.body.amount * 100,
-            // redirectUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
             redirectUrl: `http://sev7n.in/success`,
             redirectMode: 'REDIRECT',
             callbackUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
@@ -31,7 +30,7 @@ router.post('/newPayment', async (req, res) => {
         const sha256 = crypto.createHash('sha256').update(string).digest('hex');
         const checksum = sha256 + '###' + keyIndex;
 
-        const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay"
+        const prod_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay"
         const options = {
             method: 'POST',
             url: prod_URL,
@@ -55,8 +54,9 @@ router.post('/newPayment', async (req, res) => {
         });
 
     } catch (error) {
+        console.log(error);
         res.status(500).send({
-            message: error.message,
+            message: error,
             success: false
         })
     }
@@ -74,7 +74,7 @@ router.post('/status/:merchantTransactionId', async (req, res) => {
 
     const options = {
     method: 'GET',
-    url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`,
+    url: `https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}`,
     headers: {
         accept: 'application/json',
         'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ router.post('/status/:merchantTransactionId', async (req, res) => {
     // CHECK PAYMENT TATUS
     axios.request(options).then(async(response) => {
         if (response.data.success === true) {
-            const url = `http://sev7n.in/success`;
+            const url = `https://sev7n.in/success`;
             res.send(url, { state: { address: req.body.address, orderId: merchantTransactionId } })
             // res.send(url, { state: { address: req.body.address, orderId: merchantTransactionId } })
         } else {
