@@ -1,8 +1,7 @@
 const crypto =  require('crypto');
 const axios = require('axios');
-const salt_key = process.env.SALT_KEY;
-
 const router = require('express').Router();
+const salt_key = process.env.SALT_KEY
 
 
 router.post('/newPayment', async (req, res) => {
@@ -17,7 +16,7 @@ router.post('/newPayment', async (req, res) => {
             amount: req.body.amount * 100,
             redirectUrl: `http://sev7n.in/success`,
             redirectMode: 'REDIRECT',
-            callbackUrl: `https://e-commerce-api-krish3957.vercel.app/api/phonepe/status/${merchantTransactionId}`,
+            callbackUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
             mobileNumber: req.body.number,
             paymentInstrument: {
                 type: 'PAY_PAGE'
@@ -50,7 +49,7 @@ router.post('/newPayment', async (req, res) => {
             res.send(response.data.data.instrumentResponse);
         })
         .catch(function (error) {
-            res.status(500).send({error: error});
+            res.status(500).send({erorr:true,error: error});
         });
 
     } catch (error) {
@@ -86,7 +85,7 @@ router.post('/status/:merchantTransactionId', async (req, res) => {
     // CHECK PAYMENT TATUS
     axios.request(options).then(async(response) => {
         if (response.data.success === true) {
-            const url = `https://sev7n.in/success`;
+            const url = `http://sev7n.in/success`;
             res.send(url, { state: { address: req.body.address, orderId: merchantTransactionId } })
             // res.send(url, { state: { address: req.body.address, orderId: merchantTransactionId } })
         } else {
