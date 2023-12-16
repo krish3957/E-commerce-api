@@ -3,6 +3,35 @@ const axios = require('axios');
 const router = require('express').Router();
 const salt_key = process.env.SALT_KEY
 
+router.post('/newPay', async (req, res) => {
+    try {
+        const merchantTransactionId = req.body.transactionId;
+        const data = {
+            merchantId: process.env.MID,
+            merchantTransactionId: merchantTransactionId,
+            merchantUserId: req.body.MUID,
+            name: req.body.name,
+            amount: req.body.amount * 100,
+            redirectUrl: `http://sev7n.in/success`,
+            redirectMode: 'REDIRECT',
+            callbackUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
+            mobileNumber: req.body.number,
+            paymentInstrument: {
+                type: 'PAY_PAGE'
+            }
+        };
+        const payload = JSON.stringify(data);
+        const payloadMain = Buffer.from(payload).toString('base64');
+        const keyIndex = 1;
+        const string = payloadMain + '/pg/v1/pay' + salt_key;
+        const sha256 = crypto.createHash('sha256').update(string).digest('hex');
+        const checksum = sha256 + '###' + keyIndex;
+
+        res.send({ payload:payloadMain, checksum:checksum });
+    } catch (error) {
+
+    }
+});
 
 router.post('/newPayment', async (req, res) => {
 
@@ -22,6 +51,9 @@ router.post('/newPayment', async (req, res) => {
                 type: 'PAY_PAGE'
             }
         };
+    
+
+
         const payload = JSON.stringify(data);
         const payloadMain = Buffer.from(payload).toString('base64');
         const keyIndex = 1;
