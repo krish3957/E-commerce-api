@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema({
     desc: { type: String, required: true },
     //Add local image toh the database
     img: { type: String, required: true },
+    extraImg: { type: Array },
     categories:{type:Array},
     size:{type:Array},
     color:{type:Array},
