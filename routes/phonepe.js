@@ -41,7 +41,6 @@ router.post('/newPayment', async (req, res) => {
             merchantId: process.env.MID,
             merchantTransactionId: merchantTransactionId,
             merchantUserId: req.body.MUID,
-            name: req.body.name,
             amount: req.body.amount * 100,
             redirectUrl: `http://sev7n.in/success`,
             redirectMode: 'REDIRECT',
