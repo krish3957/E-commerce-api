@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
             const savedUser = await newUser.save();
             return res.status(201).json({ error: false, message: savedUser });
         } catch (err) {
-            return res.status(500);
+            return res.status(500).json;
         }
     }
 })
@@ -35,7 +35,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.body.username });
+        const user = await User.findOne({ email: req.body.email });
 
         !user && res.status(401).json({ error: true, message: "Cannot Find User, Please Register" });
         const hashedPass = CryptoJS.AES.decrypt(

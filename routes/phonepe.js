@@ -73,6 +73,8 @@ router.post('/newPayment', async (req, res) => {
                 request: payloadMain
             }
         };
+        console.log(checksum);
+        console.log(payloadMain);
 
         axios.request(options).then(function (response) {
             console.log(response.data);
