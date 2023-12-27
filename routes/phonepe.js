@@ -1,9 +1,10 @@
 const crypto =  require('crypto');
 const axios = require('axios');
+const { verifyToken } = require('./verifyToken');
 const router = require('express').Router();
 const salt_key = process.env.SALT_KEY
 
-router.post('/newPay', async (req, res) => {
+router.post('/newPay',verifyToken,async (req, res) => {
     try {
         const merchantTransactionId = req.body.transactionId;
         const data = {
