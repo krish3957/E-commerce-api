@@ -1,4 +1,5 @@
 const crypto =  require('crypto');
+var CryptoJS = require("crypto-js");
 const axios = require('axios');
 const { verifyToken } = require('./verifyToken');
 const router = require('express').Router();
@@ -12,7 +13,7 @@ router.post('/newPay',verifyToken,async (req, res) => {
             merchantTransactionId: merchantTransactionId,
             merchantUserId: req.body.MUID,
             name: req.body.name,
-            amount: req.body.amount * 100,
+            amount: crypto.AES.decrypt(req.body.amount, 'ABCDEFGH').toString(Crypto.enc.Utf8) * 100,
             redirectUrl: `http://sev7n.in/success`,
             redirectMode: 'REDIRECT',
             callbackUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
@@ -42,7 +43,7 @@ router.post('/newPayment', async (req, res) => {
             merchantId: process.env.MID,
             merchantTransactionId: merchantTransactionId,
             merchantUserId: req.body.MUID,
-            amount: req.body.amount * 100,
+            amount: CryptoJS.AES.decrypt(req.body.amount, 'ABCDEFGH').toString(CryptoJS.enc.Utf8) * 100,
             redirectUrl: `http://sev7n.in/success`,
             redirectMode: 'REDIRECT',
             callbackUrl: `http://localhost:5000/api/phonepe/status/${merchantTransactionId}`,
@@ -83,7 +84,7 @@ router.post('/newPayment', async (req, res) => {
             res.send(response.data.data.instrumentResponse);
         })
         .catch(function (error) {
-            res.status(500).send({erorr:true,error: error});
+            res.status(500).send({erorr:true,message: error});
         });
 
     } catch (error) {
